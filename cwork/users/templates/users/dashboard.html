@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{%load static%}
+{% block title %}Home Page{% endblock %}
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'style_main.css' %}" />
+</head>
+
+{%block content%}
+<body>
+    <h1> Home Page </h1>
+    <p> Welcome to your home page. </p>
+{% if request.user.is_authenticated %}
+    <p> <h> Do you want to create a </h> <a class = "link2" href="{% url 'create_post' %}"> new post </a> <h>?</h></p>
+
+{% else %}
+    <p> <h> Log in to publish posts </h></p>
+{%endif%}
+</body>
+{%endblock%}
+</html>

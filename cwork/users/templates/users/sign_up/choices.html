@@ -1,0 +1,17 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'style_reg.css' %}" />
+</head>
+
+<div class = "form">
+  <h2>Choose at least 3 fields</h2>
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+    <button class="sub_style" type="submit">Sign up</button>
+      <p> To log in you should confirm your account! Check your e-mail</p>
+  </form>
+</div>

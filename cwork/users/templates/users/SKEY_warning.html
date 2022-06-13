@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{%load static%}
+{% block title %}Home Page{% endblock %}
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'style_main.css' %}" />
+</head>
+
+{%block content%}
+<body>
+    <h1 style="color:red;"> WARNING!!! </h1>
+    <p> We suggest you to change password^ as your number of iterations for S/Key Authehtications is close to 1 </p>
+{% if request.user.is_authenticated %}
+    <p> <h> Do it now </h> <a class = "link2" href="{% url 'password_change' %}"> so u won't forget </a> <h>?</h></p>
+{%endif%}
+</body>
+{%endblock%}
+</html>

@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="Сайт для курсовой работы по программированию">
+    <link rel="stylesheet" href="{% static 'style_main.css' %}" />
+</head>
+
+<body>
+    <div id="header">
+        <h1 class="logo">COURSE WORK</h1>
+            <ul class="menu">
+                <li>
+                <a class = "link" href="{% url 'dashboard' %}">Home page</a>
+                </li>
+                <li>
+                <a class = "link" href="{% url 'post_list' %}">BLOG</a>
+                </li>
+
+
+        <span class="user">
+        {% if request.user.is_authenticated %}
+            <h> Hello {{ request.user.first_name }},</h>
+            <a class = "link" href="{% url 'logout' %}">Log out</a>
+            <a class = "link" href="{% url 'password_change' %}"> Change password </a>
+        {% else %}
+            <a class = "link" href="{% url 'login' %}">Log in</a>
+        {% endif %}
+        </span>
+                </ul>
+    </div>
+
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

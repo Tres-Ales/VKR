@@ -1,0 +1,55 @@
+{% load static %}
+<html lang="rus">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+    <link rel="stylesheet" href="{% static 'style_reg.css' %}" />
+</head>
+
+<body>
+    <div class="form">
+        <h1>Log-in</h1>
+    {% if form.errors %}
+        <p>
+            Your username and password didn't match.
+            Please try again.
+        </p>
+    {% else %}
+        <p>Please, use the following form to log-in:</p>
+    {% endif %}
+        <form id="log_skey" action="{% url 'login_skey_' %}" method="post" ONSUBMIT="return OnPwdSKEYSubmit();">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}"/>
+            <p><input type="submit" class="sub_style" name="log_in" value="Log in"></p>
+                <p><h>or</h> <a class = "link" href = "{%url 'dashboard' %}">Continue as guest</a> </p>
+            <p><h> If you don't have an account: </h> <a class = "link" href="{% url 'sign_up' %}">Sign up</a></p>
+            <p><a class = "link" href="{% url 'password_reset' %}">Forgotten your password?</a></p>
+        </form>
+    </div>
+    <script>
+       function OnPwdSKEYSubmit()
+        {
+            var p = document.getElementsByName('password')[0];
+            var p1 = document.getElementsByName('id_for_password')[0];
+            var iters = document.getElementsByName('number_of_iterations')[0];
+
+            var my_str = p.value+p1.value;
+
+            for (var i=0; i<Number(iters.value); i++) {
+                my_str = CryptoJS.MD5(my_str).toString();
+            }
+            var passhash = my_str;
+            //вычисляем ответный хеш и помещаем его значение в поле ввода пароля
+            p.value = passhash;
+
+
+            return true;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'style_reg.css' %}" />
+</head>
+<body>
+  <div class = "form">
+    <p><h>Oh, you have an account?</h> <a class = "link" href="{% url 'login' %}"> Log In </a> </p>
+    <h2>Sign up</h2>
+    <form method="post" id="form_id">
+      {% csrf_token %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}<br>
+          {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button class="sub_style" id="subbut" type="button" onclick="throwEvent()">Sign up</button>
+      <input type="text" id="urls_a" name="urls_a" style="visibility: hidden; width: 0px; height: 0px;"/>
+    </form>
+  </div>
+</body>
+<script>
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+async function throwEvent() {
+    var ExtID = "kggdakehmneaofldholladdcnidfhlmh";
+    chrome.runtime.sendMessage(ExtID, {openUrlInEditor: "hello"},
+        function(response) {});
+    await sleep(500);
+    document.getElementById("form_id").submit();
+};
+
+document.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("subbut").click();
+  }
+});
+</script>

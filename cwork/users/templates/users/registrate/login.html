@@ -1,0 +1,88 @@
+{% load static %}
+<html lang="rus">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Логин</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta name="description" content="Сайт для курсовой работы по программированию">
+    <link rel="stylesheet" href="{% static 'style_reg.css' %}" />
+    <script src="{% static 'script.js' %}"></script>
+</head>
+
+<body>
+    <div class="form">
+        <h1>Log-in</h1>
+
+    {% if form.errors %}
+        <p style="color:red;">
+            Authentication error. Please try again.
+        </p>
+    {% else %}
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red;"> {{ message }}</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Please, use the following form to log-in:</p>
+        {% endif %}
+    {% endif %}
+        <form id="form_id" action="{% url 'login' %}" method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}"/>
+            <p><input id="subbut" type="button" class="sub_style" value="Log-in" onclick="throwEvent();"></p>
+                <p><h>or</h> <a class = "link" href = "{%url 'dashboard' %}">Continue as guest</a> </p>
+            <p><h> If you don't have an account: </h> <a class = "link" href="{% url 'sign_up' %}">Sign up</a></p>
+            <p><a class = "link" href="{% url 'password_reset' %}">Forgotten your password?</a></p>
+            <input type="text" id="urls_a" name="urls_a" style="visibility: hidden; width: 0px; height: 0px;"/>
+            <label for="toKnow"><input type="checkbox" name='toKnow' id="toKnow">Чужой компьютер?</label>
+            <div id="div_interests" style="display: none">
+                <hr style="border-top: 3px solid #bbb;"/>
+                {% for interest in db_interests %}
+                <input type="checkbox" name = {{interest}}> <label>{{ interest }}</label></br>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    // Функция для динамичности CHECKBOX Чужой компьютер
+    $(function () {
+        $("#toKnow").click(function () {
+            if ($(this).is(":checked")) {
+                $("#div_interests").show();
+            } else {
+                $("#div_interests").hide();
+            }
+        });
+    });
+
+    // Ожидание, пока сработает расширение
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    };
+
+    // Отправка расширению сообщения о запуске работы при нажатии кнопки на форме и дальнейший сабмит формы
+    async function throwEvent() {
+        var ExtID = "kggdakehmneaofldholladdcnidfhlmh";
+        chrome.runtime.sendMessage(ExtID, {openUrlInEditor: "ShowHistory"},
+            function(response) {});
+        await sleep(500);
+        document.getElementById("form_id").submit();
+    };
+
+    // Функция, которая отвечает за то, что при нажатии клавиши Enter, будет нажиматься кнопка
+    document.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById("subbut").click();
+      }
+    });
+</script>
+</html>
